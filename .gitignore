@@ -1,0 +1,21 @@
+# windows
+*.bat
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# npm
+node_modules
+*.log
+*.gz
+.npm
+
+# Project specific
+.vscode
+!/examples/**/node_modules
+
+# files
+dump.json
+gulpfile.js
