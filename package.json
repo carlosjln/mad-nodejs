@@ -1,0 +1,8 @@
+{
+	"devDependencies": {
+		"fs-extra": "^0.30.0"
+	},
+	"scripts": {
+		"build": "node build.js"
+	}
+}
