@@ -1,18 +1,18 @@
 'use strict';
 
-var FS = require( 'fs' );
-var Path = require( 'path' );
+let FS = require( 'fs' );
+let Path = require( 'path' );
 
-var IO = require( './io' );
-var Utils = require( './utilities' );
+let IO = require( './io' );
+let Utils = require( './utilities' );
 
-var match_js_file = /\.js$/i;
-var match_css_file = /\.css$/i;
-var match_html_file = /\.html$/i;
+let match_js_file = /\.js$/i;
+let match_css_file = /\.css$/i;
+let match_html_file = /\.html$/i;
 
 let copy = Utils.copy;
 
-var match_file_extension = /\.[^/.]+$/;
+let match_file_extension = /\.[^/.]+$/;
 let types_extensions = {
 	'templates': '.html',
 	'styles': '.css',
@@ -27,7 +27,7 @@ let types_filters = {
 };
 
 function resource_provider( module_path, settings ) {
-	var self = this;
+	let self = this;
 
 	self.path = Path.join( module_path, "resources" );
 
@@ -82,8 +82,8 @@ resource_provider.prototype = {
 	},
 
 	get_filenames: function ( resource ) {
-		var resources_path = Path.join( this.path, type );
-		var filter = types_filters[ resource ];
+		let resources_path = Path.join( this.path, type );
+		let filter = types_filters[ resource ];
 
 		return IO.get_files( resources_path, filter );
 	},
@@ -97,9 +97,9 @@ resource_provider.prototype = {
 
 		let files = {};
 
-		var i_max = filenames.length;
-		var filename;
-		var filepath;
+		let i_max = filenames.length;
+		let filename;
+		let filepath;
 
 		// remove file extension in case filename contains it
 		while( i_max-- ) {

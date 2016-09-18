@@ -25,7 +25,7 @@ let match_module_url = /^\/mad\/module\//ig;
 
 // MISC
 let module_settings_collection = {};
-var modules_collection = {};
+let modules_collection = {};
 
 let modules_directory_exist = false;
 
@@ -66,7 +66,7 @@ function initialize_modules( path ) {
 		let id = new_module.id;
 		let registered_module = modules_collection[ id ];
 		let status = '';
-		
+
 		if( registered_module ) {
 			status = '(conflict: duplicated identifier)';
 		} else {
@@ -147,16 +147,35 @@ function dump_json( file, data ) {
 
 // DETECT ELECTRON AND MAD
 if( typeof window !== 'undefined' && window.MAD && window.process && window.process.type === "renderer" ) {
-	var MAD = window.MAD;
-	var api = MAD.api;
+	let MAD = window.MAD;
+	let api = MAD.api;
 
 	api.initialize_modules = initialize_modules;
-	api.transport[ 'electron' ] = electron_loader;
+	
+	api.transport[ 'electron' ] = {
+		fetch_module: function ( id, callback, context ) {
+			callback.call( context, get_module( id ) );
+		},
 
-	function electron_loader( id, callback, context ) {
-		var module = get_module( id );
-		callback.call( context, module );
-	}
+		fetch_resources: function ( module_id, types, callback, context ) {
+			let module = get_module( module_id );
+			let resource_provider = module.resource_provider;
+
+			let templates = resource_provider.get_templates( types.templates );
+			let styles = resource_provider.get_styles( types.styles );
+			let components = resource_provider.get_components( types.components );
+
+			let output = {
+				templates: templates,
+				styles: styles,
+				components: components
+			};
+
+			callback.call( context, output );
+		}
+	};
+
+
 
 } else {
 	module.exports = {

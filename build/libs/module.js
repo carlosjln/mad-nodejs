@@ -35,11 +35,11 @@ let resources_getter = {
 
 	get: function () {
 		let resource_provider = this.resource_provider;
-		let required = this.settings.resources.required;
+		let requires = this.settings.requires;
 
-		let templates = resource_provider.get_templates( required.templates );
-		let styles = resource_provider.get_styles( required.styles );
-		let components = resource_provider.get_components( required.components );
+		let templates = resource_provider.get_templates( requires.templates );
+		let styles = resource_provider.get_styles( requires.styles );
+		let components = resource_provider.get_components( requires.components );
 
 		let output = {
 			templates: templates,
