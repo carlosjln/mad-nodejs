@@ -1,8 +1,30 @@
 {
+	"name": "mad-nodejs",
+	"version": "1.0.0",
+	"description": "Modular Aplication Development",
+	"author": "Carlos J. Lopez",
+	"main": "mad.js",
+	"license": "MIT",
+	"keywords": [
+		"modular",
+		"application",
+		"development",
+		"web",
+		"app"
+	],
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/carlosjln/mad.git"
+	},
+	"bugs": {
+		"url": "https://github.com/carlosjln/mad/issues"
+	},
+	"homepage": "https://github.com/carlosjln/mad#readme",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"build": "node .\\build_tasks\\create-npm-dist.js"
+	},
 	"devDependencies": {
 		"fs-extra": "^0.30.0"
-	},
-	"scripts": {
-		"build": "node build.js"
 	}
 }

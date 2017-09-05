@@ -150,8 +150,8 @@ if( typeof window !== 'undefined' && window.MAD && window.process && window.proc
 	let MAD = window.MAD;
 	let api = MAD.api;
 
-	api.initialize_modules = initialize_modules;
-	
+	MAD.initialize_modules = initialize_modules;
+
 	api.transport[ 'electron' ] = {
 		fetch_module: function ( id, callback, context ) {
 			callback.call( context, get_module( id ) );
@@ -174,8 +174,6 @@ if( typeof window !== 'undefined' && window.MAD && window.process && window.proc
 			callback.call( context, output );
 		}
 	};
-
-
 
 } else {
 	module.exports = {
