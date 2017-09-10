@@ -3,8 +3,9 @@
 const FS = require( 'fs-extra' );
 const Path = require( 'path' );
 
+// USE THE SPECIFIED DIRECTORY OR THE CURRENT RUNNING DIRECTORY
 let args = process.argv.slice( 2 );
-let workspace_directory = args[ 0 ] || __dirname;
+let workspace_directory = args[ 0 ] || Path.resolve( __dirname, '..' );
 
 let source_directory = Path.join( workspace_directory, 'src' );
 let target_directory = Path.join( workspace_directory, 'dist' );
@@ -25,7 +26,7 @@ try {
 	FS.copySync( license, Path.join( target_directory, 'LICENSE' ), { clobber: true } );
 	FS.copySync( readme, Path.join( target_directory, 'README.md' ), { clobber: true } );
 
-	console.log( 'NPM dist package created [' + target_directory + ']' );
+	console.log( 'NPM dist package created [ ' + target_directory + ' ]' );
 } catch( exception ) {
 	return console.log( exception );
 }

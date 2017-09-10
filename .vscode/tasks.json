@@ -8,12 +8,11 @@
 	},
 	"tasks": [
 		{
-			"taskName": "Create npm dist",
+			"taskName": "Build",
 			"type": "shell",
 			"command": "node",
 			"args": [
-				".\\build_tasks\\create-npm-dist.js",
-				"${workspaceRoot}"
+				".\\build_tasks\\create-npm-dist.js"
 			],
 			"group": "build",
 			"presentation": {
@@ -23,24 +22,6 @@
 			},
 			"promptOnClose": true,
 			"problemMatcher": "$jshint"
-		},
-
-		// {
-		// 	"taskName": "Create npm package",
-		// 	"type": "shell",
-		// 	"command": "npm",
-		// 	"args": [
-		// 		"pack",
-		// 		"${workspaceRoot}\\dist\\npm"
-		// 	],
-		// 	"group": "build",
-		// 	"presentation": {
-		// 		"reveal": "always",
-		// 		"panel": "shared",
-		// 		"echo": true
-		// 	},
-		// 	"promptOnClose": true,
-		// 	"problemMatcher": "$jshint"
-		// }
+		}
 	]
 }
