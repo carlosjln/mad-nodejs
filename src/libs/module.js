@@ -22,6 +22,10 @@ let default_settings = {
 	}
 };
 
+/*
+ * The following getters are defined outside the Module
+ * so that they are instantiated only once
+ */
 let source_getter = {
 	enumerable: true,
 
@@ -80,21 +84,8 @@ let model_getter = {
 	}
 };
 
-function Module( settings ) {
-	let id = settings.id;
-	let path = settings.path;
-	let resources = settings.resources;
-
-	this.id = id;
-
-	define_property_value( this, "resource_provider", new ResourceProvider( path, resources ) );
-	define_property_value( this, "settings", settings );
-
-    Object.defineProperty( this, "source", source_getter );
-    Object.defineProperty( this, "resources", resources_getter );
-}
-
-Module.initialize = function ( module_path ) {
+// Static methods
+let initialize = function ( module_path ) {
 	let settings = load_settings( module_path );
 
 	if( !settings ) {
@@ -104,7 +95,7 @@ Module.initialize = function ( module_path ) {
 	return new Module( settings );
 };
 
-function load_settings( path ) {
+let load_settings = function ( path ) {
 	if( !IO.directory_exists( path ) ) {
 		return null;
 	}
@@ -142,15 +133,31 @@ function load_settings( path ) {
 	}
 
 	return settings;
+};
+
+function Module( settings ) {
+	let id = settings.id;
+	let path = settings.path;
+	let resources = settings.resources;
+
+	this.id = id;
+
+	// 'RESOURCE_PROVIDER' AND 'SETTINGS' ARE NOT ENUMERABLE SO THAT THEY ARE NOT POPULARED ON JSON OUTPUTS
+	Object.defineProperty( this, "resource_provider", {
+		enumerable: false,
+		value: new ResourceProvider( path, resources )
+	} );
+
+	Object.defineProperty( this, "settings", {
+		enumerable: false,
+		value: settings
+	} );
+
+	Object.defineProperty( this, "source", source_getter );
+	Object.defineProperty( this, "resources", resources_getter );
 }
 
-function define_property_value( target, property, data, enumerable ) {
-	let descriptor = {
-		enumerable: !!enumerable,
-		value: data
-	};
-
-	Object.defineProperty( target, property, descriptor );
-}
+Module.load_settings = load_settings;
+Module.initialize = initialize;
 
 module.exports = Module;

@@ -1,6 +1,6 @@
 /**
  * MAD
- * Copyright(c) 2016 Carlos J. Lopez
+ * Copyright(c) 2017 Carlos J. Lopez
  * MIT Licensed
  */
 
@@ -29,6 +29,7 @@ let modules_collection = {};
 
 let modules_directory_exist = false;
 
+/*
 function setup( settings ) {
 	let base_path = Path.normalize( settings.modules_path );
 	let modules_path = Path.join( base_path, 'modules' );
@@ -54,6 +55,7 @@ function start( settings ) {
 		console.log( 'ERROR: modules directory not found [' + modules_path + ']' );
 	}
 }
+*/
 
 function initialize_modules( path ) {
 	if( !path ) {
@@ -99,11 +101,11 @@ function handle( request, response ) {
     let module = Module.get( module_id );
     let reply = null;
 
-	if( content === 'resources' ) {
+	// if( content === 'resources' ) {
 
-	} else {
+	// } else {
 
-	}
+	// }
 
     if( module ) {
         reply = module;
@@ -146,11 +148,11 @@ function dump_json( file, data ) {
 }
 
 // DETECT ELECTRON AND MAD
-if( typeof window !== 'undefined' && window.MAD && window.process && window.process.type === "renderer" ) {
-	let MAD = window.MAD;
-	let api = MAD.api;
+if( typeof window !== 'undefined' && window.process && window.process.type === "renderer" ) {
+	let mad = window.mad || (window.mad = {});
+	let api = mad.api;
 
-	MAD.initialize_modules = initialize_modules;
+	mad.initialize_modules = initialize_modules;
 
 	api.transport[ 'electron' ] = {
 		fetch_module: function ( id, callback, context ) {
@@ -177,7 +179,6 @@ if( typeof window !== 'undefined' && window.MAD && window.process && window.proc
 
 } else {
 	module.exports = {
-		// setup: setup,
 		initialize_modules: initialize_modules,
 		handle: handle,
 		get_module: get_module,
