@@ -26,7 +26,7 @@ try {
 	FS.copySync( license, Path.join( target_directory, 'LICENSE' ), { clobber: true } );
 	FS.copySync( readme, Path.join( target_directory, 'README.md' ), { clobber: true } );
 
-	console.log( 'NPM dist package created [ ' + target_directory + ' ]' );
+	console.log( 'Content updated.' );
 } catch( exception ) {
 	return console.log( exception );
 }

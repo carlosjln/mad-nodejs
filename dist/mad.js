@@ -83,12 +83,16 @@ function initialize_modules( path ) {
 		return null;
 	}
 
+	// Get child directories of the current path
 	let directories = IO.get_directories( path );
-	let d_max = directories.length;
 
-	while( d_max-- ) {
-		initialize_modules( directories[ d_max ] );
+	let d_max = directories.length;
+	let i = 0;
+
+	for( ; i < d_max; i++ ) {
+		initialize_modules( directories[ i ] );
 	}
+
 }
 
 function handle( request, response ) {
@@ -98,20 +102,14 @@ function handle( request, response ) {
 	let module_id = url_parts[ 0 ];
 	let content = ( url_parts[ 1 ] || '' ).toLowerCase();
 
-    let module = Module.get( module_id );
-    let reply = null;
+	let module = get_module( module_id );
+	let reply = null;
 
-	// if( content === 'resources' ) {
-
-	// } else {
-
-	// }
-
-    if( module ) {
-        reply = module;
-    } else {
+	if( module ) {
+		reply = module;
+	} else {
 		reply = {
-			exception: "Module not found"
+			exception: "Module not found."
 		};
 
 		console.log( 'Error: Module not found [' + module_id + ']' );
@@ -144,12 +142,12 @@ function dump_json( file, data ) {
 
 	cache = null;
 
-	FS.writeFile( file, output, function () { });
+	FS.writeFile( file, output, function () { } );
 }
 
 // DETECT ELECTRON AND MAD
 if( typeof window !== 'undefined' && window.process && window.process.type === "renderer" ) {
-	let mad = window.mad || (window.mad = {});
+	let mad = window.mad || ( window.mad = {} );
 	let api = mad.api;
 
 	mad.initialize_modules = initialize_modules;
