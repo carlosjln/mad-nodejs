@@ -1,5 +1,5 @@
 /**
- * MAD
+ * Modular Application Development (MAD)
  * Copyright(c) 2017 Carlos J. Lopez
  * MIT Licensed
  */
@@ -28,34 +28,6 @@ let module_settings_collection = {};
 let modules_collection = {};
 
 let modules_directory_exist = false;
-
-/*
-function setup( settings ) {
-	let base_path = Path.normalize( settings.modules_path );
-	let modules_path = Path.join( base_path, 'modules' );
-
-	modules_directory_exist = IO.directory_exists( modules_path );
-
-	if( !modules_directory_exist ) {
-		console.log( 'WARNING: Path does not exist [' + modules_path + ']' );
-	}
-
-	copy( settings, app_settings );
-}
-
-function start( settings ) {
-	if( modules_directory_exist ) {
-		console.log( '\n' );
-		console.log( 'MAD' );
-		console.log( 'Scanning [' + modules_path + ']' );
-		console.log( '\n' );
-
-		initialize_modules( modules_path );
-	} else {
-		console.log( 'ERROR: modules directory not found [' + modules_path + ']' );
-	}
-}
-*/
 
 function initialize_modules( path ) {
 	if( !path ) {

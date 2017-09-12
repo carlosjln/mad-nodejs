@@ -7,7 +7,6 @@ let Path = require( 'path' );
 
 let IO = require( './io' );
 let Utilities = require( './utilities' );
-
 let ResourceProvider = require( './resource_provider' );
 
 let copy = Utilities.copy;
