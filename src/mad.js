@@ -1,9 +1,3 @@
-/**
- * Modular Application Development (MAD)
- * Copyright(c) 2017 Carlos J. Lopez
- * MIT Licensed
- */
-
 'use strict';
 
 let FS = require( 'fs' );
@@ -23,17 +17,39 @@ let copy = Utilities.copy;
 let match_resources_path = /(\\|\/)resources(\\|\/)*$/ig;
 let match_module_url = /^\/mad\/module\//ig;
 
-// MISC
+// COLLECTIONS
 let module_settings_collection = {};
 let modules_collection = {};
 
-let modules_directory_exist = false;
+function detect_modules( path ) {
+	let config_file = Path.join( path, "module.json" );
+	let modules = [];
+
+	if( FS.existsSync( config_file ) ) {
+		modules.add( {
+			path: path,
+			config_file: config_file,
+			status: ''
+		} );
+	}
+
+	let child_directories = IO.get_directories( path );
+	let d_max = child_directories.length;
+
+	for( let i = 0; i < d_max; i++ ) {
+		modules.extend( detect_modules( child_directories[ i ] ) );
+	}
+
+	return modules;
+}
 
 function initialize_modules( path ) {
-	if( !path ) {
+	if( !path || !FS.existsSync( path ) ) {
 		return;
 	}
 
+	console.log( detect_modules(path) );
+	return;
 	let new_module = Module.initialize( path );
 
 	if( new_module ) {
@@ -90,71 +106,20 @@ function handle( request, response ) {
 	response.end( JSON.stringify( reply ) );
 }
 
+/*
+ * Looks for the specified module in the cache collection and returns it.
+ */
 function get_module( id ) {
-	return modules_collection[ id ];
+	let module = modules_collection[ id ];
+
+	if( module ) {
+		return module;
+	}
+
+	throw 'Module not found [ ' + id + ' ]';
 }
 
-function dump_json( file, data ) {
-	let cache = [];
-	let filter = function ( key, value ) {
-		if( typeof value === 'object' && value !== null ) {
-			if( cache.indexOf( value ) !== -1 ) {
-				// Circular reference found, discard key
-				return;
-			}
-
-			// Store value in our collection
-			cache.push( value );
-		}
-
-		return value;
-	};
-
-	let output = JSON.stringify( data, filter, 4 );
-
-	cache = null;
-
-	FS.writeFile( file, output, function () { } );
-}
-
-// DETECT ELECTRON AND MAD
-if( typeof window !== 'undefined' && window.process && window.process.type === "renderer" ) {
-	let mad = window.mad || ( window.mad = {} );
-	let api = mad.api;
-
-	mad.initialize_modules = initialize_modules;
-
-	api.transport[ 'electron' ] = {
-		fetch_module: function ( id, callback, context ) {
-			callback.call( context, get_module( id ) );
-		},
-
-		fetch_resources: function ( module_id, types, callback, context ) {
-			let module = get_module( module_id );
-			let resource_provider = module.resource_provider;
-
-			let templates = resource_provider.get_templates( types.templates );
-			let styles = resource_provider.get_styles( types.styles );
-			let components = resource_provider.get_components( types.components );
-
-			let output = {
-				templates: templates,
-				styles: styles,
-				components: components
-			};
-
-			callback.call( context, output );
-		}
-	};
-
-} else {
-	module.exports = {
-		initialize_modules: initialize_modules,
-		handle: handle,
-		get_module: get_module,
-
-		utilities: {
-			dump_json: dump_json,
-		}
-	};
-}
+module.exports = {
+	get_module: get_module,
+	initialize_modules: initialize_modules
+};

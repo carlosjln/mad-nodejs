@@ -7,7 +7,6 @@ let Path = require( 'path' );
 
 let IO = require( './io' );
 let Utilities = require( './utilities' );
-
 let ResourceProvider = require( './resource_provider' );
 
 let copy = Utilities.copy;
@@ -96,7 +95,7 @@ let initialize = function ( module_path ) {
 };
 
 let load_settings = function ( path ) {
-	if( !IO.directory_exists( path ) ) {
+	if( !FS.existsSync( path ) ) {
 		return null;
 	}
 

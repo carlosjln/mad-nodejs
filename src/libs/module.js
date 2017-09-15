@@ -95,7 +95,7 @@ let initialize = function ( module_path ) {
 };
 
 let load_settings = function ( path ) {
-	if( !IO.directory_exists( path ) ) {
+	if( !FS.existsSync( path ) ) {
 		return null;
 	}
 
