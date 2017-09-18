@@ -8,6 +8,7 @@ let Path = require( 'path' );
 let IO = require( './io' );
 let Utilities = require( './utilities' );
 let ResourceProvider = require( './resource_provider' );
+let Errors = require( './errors' );
 
 let copy = Utilities.copy;
 let get_type = Utilities.get_type;
@@ -85,25 +86,23 @@ let model_getter = {
 
 // Static methods
 let initialize = function ( module_path ) {
-	let settings = load_settings( module_path );
+	let settings_file = Path.join( path, "module.json" );
+	let settings = read_settings( settings_file );
 
-	if( !settings ) {
-		return null;
+	if( settings ) {
+		return new Module( settings );
 	}
 
-	return new Module( settings );
+	return null;
 };
 
-let load_settings = function ( path ) {
-	if( !FS.existsSync( path ) ) {
+let read_settings = function ( filepath ) {
+	if( !FS.existsSync( filepath ) ) {
 		return null;
 	}
 
-	let file = Path.join( path, "module.json" );
-
-	let content = IO.get_content( file );
+	let content = IO.get_content( filepath );
 	let settings = null;
-	let exceptions = [];
 
 	if( !content ) {
 		return null;
@@ -111,40 +110,29 @@ let load_settings = function ( path ) {
 
 	try {
 		settings = JSON.parse( content );
-		settings.path = path;
+		settings.path = Path.dirname( filepath );
 
 		copy( default_settings, settings, true );
 	} catch( e ) {
-		exceptions.add( 'WARNING: unable to parse settings file.' );
-		exceptions.add( e );
-		exceptions.add( 'File: ' + file );
-
-		throw exceptions.join( '\n' );
+		throw new Errors.InvalidJSON( filepath );
 	}
 
 	let module_id = settings.id;
 
 	if( !module_id || !match_valid_id.test( module_id ) ) {
-		exceptions.add( 'WARNING: invalid module id [' + module_id + ']' );
-		exceptions.add( 'File: ' + file );
-
-		throw exceptions.join( '\n' );
+		throw new Error.InvalidModuleId( filepath );
 	}
 
 	return settings;
 };
 
 function Module( settings ) {
-	let id = settings.id;
-	let path = settings.path;
-	let resources = settings.resources;
-
-	this.id = id;
+	this.id = settings.id;
 
 	// 'RESOURCE_PROVIDER' AND 'SETTINGS' ARE NOT ENUMERABLE SO THAT THEY ARE NOT POPULARED ON JSON OUTPUTS
 	Object.defineProperty( this, "resource_provider", {
 		enumerable: false,
-		value: new ResourceProvider( path, resources )
+		value: new ResourceProvider( settings.path, settings.resources )
 	} );
 
 	Object.defineProperty( this, "settings", {
@@ -156,7 +144,7 @@ function Module( settings ) {
 	Object.defineProperty( this, "resources", resources_getter );
 }
 
-Module.load_settings = load_settings;
+Module.read_settings = read_settings;
 Module.initialize = initialize;
 
 module.exports = Module;
