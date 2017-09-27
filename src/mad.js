@@ -73,14 +73,14 @@ function initialize_modules( path ) {
 
 			if( cached_module ) {
 				if( cached_module.settings.path === settings.path ) {
-					status = '(Already initialized)';
+					status = '(Already registered)';
 				} else {
-					status = '(conflict: duplicated module id)';
+					status = '(Conflict: duplicated module id)';
 				}
 
 			} else {
 				modules_collection[ module_id ] = new Module( settings );
-				status = '(Initialized)';
+				status = '(Registered)';
 			}
 
 			console.log( 'Module [' + module_id + '] ' + status );
@@ -113,11 +113,11 @@ function express( request, response, next ) {
 
 	let matches = match_module_name.exec( original_url );
 
-	let module_name = matches[ 1 ];
+	let module_id = matches[ 1 ];
 	let output = {};
 
 	try {
-		output.data = get_module( module_name );
+		output.data = get_module( module_id );
 	} catch( error ) {
 		output.errors = [ error ];
 		response.status( 404 );
