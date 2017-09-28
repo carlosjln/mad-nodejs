@@ -39,6 +39,25 @@
 			},
 			"promptOnClose": true,
 			"problemMatcher": "$jshint"
+		},
+		{
+			"taskName": "Run tests",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"test"
+			],
+			"group": {
+				"kind": "test",
+				"isDefault": true
+			},
+			"presentation": {
+				"reveal": "always",
+				"panel": "dedicated",
+				"echo": true
+			},
+			"promptOnClose": true,
+			"problemMatcher": "$jshint"
 		}
 	]
 }

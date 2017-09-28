@@ -21,10 +21,29 @@
 	},
 	"homepage": "https://github.com/carlosjln/mad#readme",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
+		"test": "ava --verbose --tap | faucet",
 		"build": "node .\\build_tasks\\create-npm-dist.js"
 	},
 	"devDependencies": {
+		"ava": "^0.20.0",
+		"faucet": "0.0.1",
 		"fs-extra": "^0.30.0"
+	},
+	"ava": {
+		"files": [
+			"./test/**/*"
+		],
+		"source": [
+			"./tests/**/*"
+		],
+		"concurrency": 5,
+		"failFast": true,
+		"failWithoutAssertions": false,
+		"tap": true,
+		"powerAssert": false,
+		"require": [
+			"babel-register"
+		],
+		"babel": "inherit"
 	}
 }

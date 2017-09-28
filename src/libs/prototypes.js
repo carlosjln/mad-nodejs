@@ -1,6 +1,6 @@
 'use strict';
 
-// ARRAY - CUSTOM POLYFILLS
+// ARRAY - CUSTOM METHODS
 Array.prototype.contains = function ( object ) {
 	return this.indexOf( object ) > -1;
 };
@@ -13,6 +13,10 @@ Array.prototype.add = function ( item ) {
 	let self = this;
 	self[ self.length ] = item;
 	return self;
+};
+
+Array.prototype.unique = function () {
+	return Array.from( new Set( this ) );
 };
 
 // Unlike Array.prototype.concat, .extend() modifies the current array and appends the items of the passed arrays
@@ -89,7 +93,7 @@ Array.from_object = function ( array_like ) {
 };
 
 
-// FUNCTION - CUSTOM POLYFILLS
+// FUNCTION - CUSTOM METHODS
 Function.prototype.async = function ( /*args*/ ) {
 	let args = Array.prototype.slice.call( arguments );
 
@@ -133,7 +137,7 @@ if( !String.prototype.trim ) {
 	};
 }
 
-// STRING - CUSTOM POLYFILLS
+// STRING - CUSTOM METHODS
 String.prototype.contains = function ( text ) {
 	return this.indexOf( text ) > -1;
 };
