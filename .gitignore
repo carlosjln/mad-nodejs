@@ -12,6 +12,9 @@ node_modules
 *.gz
 .npm
 
+.nyc_output
+.coverage
+
 # Project specific
 
 

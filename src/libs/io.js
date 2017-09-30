@@ -3,6 +3,8 @@
 let FS = require( 'fs' );
 let Path = require( 'path' );
 
+require( './prototypes' );
+
 function get_directories( path ) {
 	let directories = [];
 

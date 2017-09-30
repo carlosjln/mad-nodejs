@@ -59,5 +59,25 @@
 			"promptOnClose": true,
 			"problemMatcher": "$jshint"
 		}
+		// {
+		// 	"taskName": "Run tests coverage",
+		// 	"type": "shell",
+		// 	"command": "npm",
+		// 	"args": [
+		// 		"run",
+		// 		"cover"
+		// 	],
+		// 	"group": {
+		// 		"kind": "test",
+		// 		"isDefault": true
+		// 	},
+		// 	"presentation": {
+		// 		"reveal": "always",
+		// 		"panel": "dedicated",
+		// 		"echo": true
+		// 	},
+		// 	"promptOnClose": true,
+		// 	"problemMatcher": "$jshint"
+		// }
 	]
 }

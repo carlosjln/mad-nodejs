@@ -49,6 +49,7 @@ function get_templates( base_path, file_names ) {
 			filepath = Path.join( base_path, raw_name );
 
 			templates.add( {
+				id: raw_name,
 				html: IO.get_content( filepath + '.html' ),
 				style: IO.get_content( filepath + '.css' )
 			} );
@@ -105,7 +106,7 @@ content_provider.prototype = {
 	},
 
 	get_main: function () {
-		let filepath = Path.join( this.path, 'main.js' );
+		let filepath = Path.join( this.module_path, 'main.js' );
 		return this.cache_storage.main || IO.get_content( filepath );
 	},
 
