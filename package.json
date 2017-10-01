@@ -50,8 +50,7 @@
 		"tap": false,
 		"powerAssert": false,
 		"require": [
-			"babel-register",
-			"babel-polyfill"
+			"babel-register"
 		]
 	},
 	"nyc": {
