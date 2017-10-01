@@ -13,7 +13,7 @@ node_modules
 .npm
 
 .nyc_output
-.coverage
+/test/coverage
 
 # Project specific
 

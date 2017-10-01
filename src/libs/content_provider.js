@@ -32,11 +32,11 @@ let types_filters = {
  * @param {String[]} [file_names] - list of file names that you want to look for.
  */
 function get_templates( module_path, file_names ) {
-	let templates = [];
-
-	if( !file_names || !file_names.length ) {
-		return templates;
+	if( !FS.existsSync( module_path ) ) {
+		return [];
 	}
+
+	let templates = [];
 
 	let done = {};
 	let raw_name;
@@ -59,11 +59,11 @@ function get_templates( module_path, file_names ) {
 			style: IO.get_content( filepath + '.css' )
 		} );
 	}
-	
+
 	return templates;
 }
 
-function get_components( base_path, file_names ) {
+function get_components( module_path, file_names ) {
 	let components = [];
 
 	if( file_names && file_names.length ) {
@@ -72,7 +72,7 @@ function get_components( base_path, file_names ) {
 
 		for( let i = 0; i < file_names.length; i++ ) {
 			raw_name = file_names[ i ].replace( match_file_extension, '' );
-			filepath = Path.join( base_path, raw_name );
+			filepath = Path.join( module_path, raw_name );
 
 			components.add( {
 				main: IO.get_content( filepath + '.js' ),
@@ -86,26 +86,27 @@ function get_components( base_path, file_names ) {
 }
 
 function content_provider( config ) {
-	var module_path = this.module_path = config.module_path;
-	this.cache = config.cache;
-	this.cache_storage = {
-		templates: {},
-		components: {}
-	};
-
-	this.main_js_path = Path.join( module_path, 'main.js' );
-	this.templates_path = Path.join( module_path, "templates" );
-	this.components_path = Path.join( module_path, "components" );
-
-	this.update_cache();
+	this.update_config( config );
 }
 
 content_provider.prototype = {
 	constructor: content_provider,
 
+	update_config: function ( config ) {
+		var module_path = this.module_path = config.module_path;
+
+		this.cache = config.cache;
+		this.cache_store = { templates: {}, components: {} };
+		this.main_js_path = Path.join( module_path, 'main.js' );
+		this.templates_path = Path.join( module_path, "templates" );
+		this.components_path = Path.join( module_path, "components" );
+
+		this.update_cache();
+	},
+
 	update_cache: function () {
 		let cache = this.cache;
-		let cache_storage = this.cache_storage;
+		let cache_store = this.cache_store;
 
 		// Cache nothing
 		if( cache === false ) {
@@ -114,9 +115,9 @@ content_provider.prototype = {
 
 		// Cache all files
 		if( cache === true ) {
-			cache_storage.main = this.get_main();
-			cache_storage.templates = this.get_files( 'templates' );
-			cache_storage.components = this.get_files( 'components' );
+			cache_store.main = this.get_main();
+			cache_store.templates = this.get_files( 'templates' );
+			cache_store.components = this.get_files( 'components' );
 		} else {
 			// CACHE SPECIFIC FILES
 		}
@@ -125,21 +126,25 @@ content_provider.prototype = {
 	},
 
 	get_main: function () {
-		return this.cache_storage.main || IO.get_content( this.main_js_path );
+		return this.cache_store.main || IO.get_content( this.main_js_path );
 	},
 
 	get_templates: function ( names ) {
-		let templates_path = this.templates_path;
-		let file_names = names ? names : IO.get_files( templates_path );
+		return get_templates( this.templates_path, names );
+	},
 
-		return get_templates( templates_path, file_names );
+	get_all_templates: function () {
+		let templates_path;
+		return get_templates( templates_path, IO.get_files( templates_path ) );
 	},
 
 	get_components: function ( names ) {
-		let components_path = Path.join( this.module_path, "components" );
-		let file_names = names ? names : IO.get_files( components_path );
+		return get_components( this.components_path, names );
+	},
 
-		return get_templates( components_path, file_names );
+	get_all_components: function () {
+		let components_path = this.components_path;
+		return get_components( components_path, IO.get_files( components_path ) );
 	}
 };
 

@@ -14,77 +14,68 @@ let match_valid_id = /^[a-z0-9-_]+$/i;
  * The following getters are defined outside the Module
  * so that they are instantiated only once
  */
-let main_getter = {
-	enumerable: true,
 
+let api_model_getter = {
+	enumerable: false,
 	get: function () {
-		return this.content_provider.get_main();
+		let content_provider = this.content_provider;
+		let include = this.resources.include;
+		let output = {
+			id: this.id,
+			main: content_provider.get_main(),
+			templates: content_provider.get_templates( include.templates ),
+			components: content_provider.get_components( include.components )
+		};
+
+		return output;
 	}
 };
-
-/*
-ModuleInfo = {
-	id: null,
-
-	settings: {},
-	templates: [],
-	components: [],
-
-	include: {
-		templates: [],
-		components: []
-	},
-
-	cache: false,
-	cache: {
-		templates: [],
-		components: []
-	}
-};
-*/
 
 function ModuleInfo( data ) {
-	// Public Properties
-	this.id = data.id;
-	this.settings = data.settings || {};
+	let module_path = data.path;
 
-	Object.defineProperty( this, "main", main_getter );
-	this.templates = [ 'main' ].extend( data.templates || [] );
-	this.components = data.components || [];
-	
-	// Private Properties
-	Object.defineProperty( this, "cache", {
-		enumerable: false,
-		value: data.cache || false
+	// Public Properties
+	Object.defineProperty( this, "id", {
+		enumerable: true,
+		value: data.id
 	} );
 
 	Object.defineProperty( this, "path", {
-		enumerable: false,
-		value: data.path || null
+		enumerable: true,
+		value: module_path || null
 	} );
-	
+
+	Object.defineProperty( this, 'resources', {
+		enumerable: true,
+		value: {
+			cache: data.cache || false,
+			include: {
+				templates: [ 'main' ].extend( data.templates || [] ).unique(),
+				components: [ 'main' ].extend( data.components || [] ).unique()
+			}
+		}
+	} );
+
+	// Private Properties
 	Object.defineProperty( this, "content_provider", {
 		enumerable: false,
-		value: new ContentProvider( settings.path, settings.resources )
+		value: new ContentProvider( module_path, settings.resources )
 	} );
+
+	Object.defineProperty( this, "api_model", api_model_getter );
 }
 
-// // Copy specified settings
-// copy( config, this );
-// // Copy undefined default settings
-// copy( default_config, this, true );
-
 function Load( filepath ) {
-	if( !FS.existsSync( filepath ) ) {
-		return null;
-	}
+	// if( !FS.existsSync( filepath ) ) {
+	// 	throw new Errors.FileNotFound( filepath );
+	// }
 
 	let content = IO.get_content( filepath );
 	let settings = null;
 
-	if( !content ) {
-		return null;
-	}
+	// if( !content ) {
+	// 	return null;
+	// }
 
 	try {
 		settings = JSON.parse( content );

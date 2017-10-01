@@ -4,6 +4,12 @@ function ModuleNotFound( module_name ) {
 	this.module_name = module_name;
 }
 
+function FileNotFound( filepath ) {
+	this.code = 404;
+	this.message = "File not found.";
+	this.module_name = filepath;
+}
+
 function InvalidModuleId( module_name ) {
 	this.code = 500;
 	this.message = "Module IDs can only contain alphanumeric characters, dash and underscore.";

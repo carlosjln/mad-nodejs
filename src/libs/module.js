@@ -35,7 +35,7 @@ let source_getter = {
 };
 
 let resources_getter = {
-	enumerable: true,
+	enumerable: false,
 
 	get: function () {
 		let resource_provider = this.resource_provider;

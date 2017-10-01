@@ -37,18 +37,20 @@
 	},
 	"ava": {
 		"files": [
-			"test/**/*.js"
+			"test/**/*.js",
+			"!test/coverage/**/*"
 		],
 		"source": [
-			"./src/**/*",
-			"./tests/**/*",
-			"./package.json"
+			"src/**/*",
+			"tests/**/*",
+			"!test/coverage/**/*",
+			"package.json"
 		],
 		"concurrency": 5,
 		"failFast": false,
 		"failWithoutAssertions": false,
 		"tap": false,
-		"powerAssert": false,
+		"powerAssert": true,
 		"require": [
 			"babel-register"
 		]
@@ -59,7 +61,7 @@
 			"text",
 			"html"
 		],
-		"report-dir": "./.coverage"
+		"report-dir": "./test/coverage"
 	},
 	"dependencies": {}
 }
