@@ -35,6 +35,8 @@ function get_templates( module_path, file_names ) {
 	if( !FS.existsSync( module_path ) ) {
 		return [];
 	}
+	
+	file_names = file_names ? file_names : [];
 
 	let templates = [];
 
@@ -64,22 +66,33 @@ function get_templates( module_path, file_names ) {
 }
 
 function get_components( module_path, file_names ) {
+	if( !FS.existsSync( module_path ) ) {
+		return [];
+	}
+
 	let components = [];
 
-	if( file_names && file_names.length ) {
-		let raw_name;
-		let filepath;
+	let done = {};
+	let raw_name;
+	let filepath;
 
-		for( let i = 0; i < file_names.length; i++ ) {
-			raw_name = file_names[ i ].replace( match_file_extension, '' );
-			filepath = Path.join( module_path, raw_name );
+	for( let i = 0; i < file_names.length; i++ ) {
+		// remove the file extension so that only unique file names are processed
+		raw_name = file_names[ i ].replace( match_file_extension, '' );
 
-			components.add( {
-				main: IO.get_content( filepath + '.js' ),
-				html: IO.get_content( filepath + '.html' ),
-				style: IO.get_content( filepath + '.css' )
-			} );
+		if( done[ raw_name ] ) {
+			continue;
 		}
+
+		done[ raw_name ] = true;
+		filepath = Path.join( module_path, raw_name );
+
+		components.add( {
+			id: raw_name,
+			main: IO.get_content( filepath + '.js' ),
+			html: IO.get_content( filepath + '.html' ),
+			style: IO.get_content( filepath + '.css' )
+		} );
 	}
 
 	return components;
