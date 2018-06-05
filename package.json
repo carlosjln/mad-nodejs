@@ -22,7 +22,7 @@
 	"homepage": "https://github.com/carlosjln/mad#readme",
 	"scripts": {
 		"test": "ava --verbose --tap | faucet",
-		"watch:test": "ava --watch --verbose --color",
+		"watch-test": "ava --watch --verbose --color",
 		"cover": "nyc npm run test",
 		"build": "node .\\build_tasks\\create-npm-dist.js"
 	},
