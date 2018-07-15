@@ -21,10 +21,47 @@
 	},
 	"homepage": "https://github.com/carlosjln/mad#readme",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
+		"test": "ava --verbose --tap | faucet",
+		"watch-test": "ava --watch --verbose --color",
+		"cover": "nyc npm run test",
 		"build": "node .\\build_tasks\\create-npm-dist.js"
 	},
 	"devDependencies": {
-		"fs-extra": "^0.30.0"
-	}
+		"ava": "^0.22.0",
+		"babel-preset-env": "^1.6.0",
+		"babel-register": "^6.26.0",
+		"faucet": "0.0.1",
+		"fs-extra": "^0.30.0",
+		"nyc": "^11.2.1",
+		"sinon": "^4.0.0"
+	},
+	"ava": {
+		"files": [
+			"test/**/*.js",
+			"!test/coverage/**/*"
+		],
+		"source": [
+			"src/**/*",
+			"tests/**/*",
+			"!test/coverage/**/*",
+			"package.json"
+		],
+		"concurrency": 5,
+		"failFast": false,
+		"failWithoutAssertions": false,
+		"tap": false,
+		"powerAssert": true,
+		"require": [
+			"babel-register"
+		]
+	},
+	"nyc": {
+		"reporter": [
+			"lcov",
+			"text",
+			"html"
+		],
+		"report-dir": "./test/coverage"
+	},
+	"dependencies": {}
 }

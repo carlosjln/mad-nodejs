@@ -1,7 +1,7 @@
 let mad = require( './mad' );
 
 /*
- * Detect Electron renderer process, which is node, but we should treat as a browser.
+ * Detect Electron renderer process, which is node, but should be treated as a browser.
  */
 
 if( typeof process !== 'undefined' && process.type === 'renderer' ) {

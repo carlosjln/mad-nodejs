@@ -8,7 +8,7 @@
 	},
 	"tasks": [
 		{
-			"taskName": "Build",
+			"label": "Build",
 			"type": "shell",
 			"command": "node",
 			"args": [
@@ -24,7 +24,7 @@
 			"problemMatcher": "$jshint"
 		},
 		{
-			"taskName": "Create npm package",
+			"label": "Create npm package",
 			"type": "shell",
 			"command": "npm",
 			"args": [
@@ -41,7 +41,7 @@
 			"problemMatcher": "$jshint"
 		},
 		{
-			"taskName": "Run tests",
+			"label": "Run tests",
 			"type": "shell",
 			"command": "npm",
 			"args": [

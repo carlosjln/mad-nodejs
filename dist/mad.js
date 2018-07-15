@@ -6,6 +6,7 @@ let Path = require( 'path' );
 let IO = require( './libs/io' );
 let Utilities = require( './libs/utilities' );
 let Module = require( './libs/module' );
+let ModuleConfig = require( './libs/module_config' );
 let Errors = require( './libs/errors' );
 
 let app_settings = require( './libs/app_settings' );
@@ -19,7 +20,7 @@ let match_resources_directory = /(\\|\/)resources(\\|\/)*$/ig;
 let match_module_name = /^\/mad\/module\/([a-z0-9-_]+)/;
 
 // COLLECTIONS
-let module_settings_collection = {};
+let modules_config_collection = {};
 let modules_collection = {};
 
 function detect_modules( path ) {
@@ -73,14 +74,14 @@ function initialize_modules( path ) {
 
 			if( cached_module ) {
 				if( cached_module.settings.path === settings.path ) {
-					status = '(Already registered)';
+					status = '(Reloaded)';
 				} else {
 					status = '(Conflict: duplicated module id)';
 				}
 
 			} else {
 				modules_collection[ module_id ] = new Module( settings );
-				status = '(Registered)';
+				status = '(Loaded)';
 			}
 
 			console.log( 'Module [' + module_id + '] ' + status );

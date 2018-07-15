@@ -120,7 +120,7 @@ let read_settings = function ( filepath ) {
 	let module_id = settings.id;
 
 	if( !module_id || !match_valid_id.test( module_id ) ) {
-		throw new Error.InvalidModuleId( filepath );
+		throw new Errors.InvalidModuleId( filepath );
 	}
 
 	return settings;

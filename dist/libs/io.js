@@ -3,6 +3,8 @@
 let FS = require( 'fs' );
 let Path = require( 'path' );
 
+require( './prototypes' );
+
 function get_directories( path ) {
 	let directories = [];
 
@@ -36,36 +38,31 @@ function file_exists( path ) {
 function get_content( filepath ) {
 	let content = null;
 
-    try {
-        content = FS.readFileSync( filepath, 'utf-8' );
-    } catch( e ) { }
+	try {
+		content = FS.readFileSync( filepath, 'utf-8' );
+	} catch( e ) { }
 
-    return content;
+	return content;
 }
 
-function get_files( path, filter ) {
-	let files = [];
+function get_files( path ) {
+	let temp = [];
 
 	try {
-		files = FS.readdirSync( path );
-	} catch( error ) {
-		//console.log( 'ERROR: ' + error.message );
-	}
+		temp = FS.readdirSync( path );
+	} catch( error ) { }
 
-	if( filter !== undefined ) {
-		let list = [];
-		let i = files.length;
-		let file;
+	let files = [];
+	let file;
+	let filepath;
+	
+	for( let i = 0; i < temp.length; i++ ) {
+		file = temp[ i ];
+		filepath = Path.join( path, file );
 
-		while( i-- ) {
-			file = files[ i ];
-
-			if( filter.test( file ) ) {
-				list[ list.length ] = file;
-			}
+		if( FS.statSync( filepath ).isFile() ) {
+			files[ files.length ] = file;
 		}
-
-		files = list;
 	}
 
 	return files;
