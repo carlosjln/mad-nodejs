@@ -42,7 +42,7 @@ try {
 		clobber: true
 	} );
 
-	// pack( target_directory );
+	pack( target_directory );
 
 	console.log( 'Content updated.' );
 } catch ( exception ) {
